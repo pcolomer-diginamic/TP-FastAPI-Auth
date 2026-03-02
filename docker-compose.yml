@@ -1,0 +1,53 @@
+services:
+  fastapi:
+    build: .
+    ports:
+      - "8085:8000"
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - demo_network
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - demo_network
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: ${USER}
+      PMA_PASSWORD: ${PASSWORD}
+    ports:
+      - "8086:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - demo_network
+
+volumes:
+  db_data:
+
+
+networks:
+  demo_network:
+    driver: bridge

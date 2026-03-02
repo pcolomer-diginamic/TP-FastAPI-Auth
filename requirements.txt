@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlmodel
+pymysql
+python-dotenv
+pydantic-settings
+#TP - Authentification
+passlib
+argon2-cffi==25.1.0
+argon2-cffi-bindings==25.1.0
+cffi==2.0.0

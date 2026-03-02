@@ -1,0 +1,13 @@
+*.pdf
+.cfg
+run.py
+*.pyc
+__*.*
+init*
+*.md
+*.cfg
+apprenants*
+cours*
+include/
+Lib/
+Scripts/
